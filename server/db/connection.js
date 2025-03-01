@@ -18,6 +18,6 @@ try {
   console.error(err);
 }
 
-let db = client.db("user-data");
+let db = client.db("account-info");
 
 export default db;

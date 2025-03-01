@@ -10,9 +10,9 @@ router.get("/", async (req, res) => {
   res.status(200).send(results);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:username", async (req, res) => {
   let collection = await db.collection("records");
-  let query = { _id: new ObjectId(req.params.id) };
+  let query = { username: new String(req.params.username) };
   let result = await collection.findOne(query);
 
   if (!result) res.status(404).send("User not found");
@@ -37,9 +37,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:username", async (req, res) => {
   try {
-    const query = { _id: new ObjectId(req.params.id) };
+    const query = { username: new String(req.params.username) };
     const updates = {
       $set: {
         username: req.body.username,
@@ -59,9 +59,9 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:username", async (req, res) => {
   try {
-    const query = { _id: new ObjectId(req.params.id) };
+    const query = { username: new String(req.params.username) };
     const collection = db.collection("records");
 
     let result = await collection.deleteOne(query);
