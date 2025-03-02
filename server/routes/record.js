@@ -73,4 +73,17 @@ router.delete("/:username", async (req, res) => {
   }
 });
 
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  let collection = db.collection("records");
+
+  let result = await collection.findOne({ username, password });
+
+  if (result) {
+      res.status(200).json({ success: true, message: "Successful" });
+  } else {
+      res.status(401).json({ success: false, message: "Invalid" });
+  }
+});
+
 export default router;
