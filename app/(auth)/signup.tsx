@@ -11,7 +11,7 @@ export default function SignupScreen() {
     return (
         <View>
             <Text style={{ fontSize: 24, marginBottom: 20 }}>Sign Up</Text>
-            <TextInput placeholder="Email" style={inputBox} />
+            <TextInput placeholder="Username" style={inputBox} />
             <TextInput placeholder="Password" style={inputBox} secureTextEntry />
             <Button title="Sign Up" onPress={() => router.replace("/(tabs)/map")} />
             <Button title="Have Account" onPress={() => router.push("/(auth)/login")} />
