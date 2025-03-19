@@ -73,4 +73,20 @@ router.delete("/:username", async (req, res) => {
   }
 });
 
+<<<<<<< Updated upstream
+=======
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  let collection = db.collection("user accounts");
+
+  let result = await collection.findOne({ username, password });
+
+  if (result) {
+      res.status(200).json({ success: true, message: "Successful" });
+  } else {
+      res.status(401).json({ success: false, message: "Invalid" });
+  }
+});
+
+>>>>>>> Stashed changes
 export default router;

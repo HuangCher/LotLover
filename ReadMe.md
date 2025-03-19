@@ -1,5 +1,12 @@
 start here
 
+<<<<<<< Updated upstream
+=======
+make sure you replace the IP_ADDRESS in .env with your own
+use ipconfig in a terminal to find your ip address
+
+##frontend
+>>>>>>> Stashed changes
 make sure to run npm install expo
 npm start to get expo to appear
 download expo-go on your moblie device and scan the QR code
