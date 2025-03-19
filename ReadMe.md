@@ -1,7 +1,7 @@
 ##START HERE
 
-make sure you replace the IP_ADDRESS in .env with your own
-use ipconfig to find yuor ip address
+make sure you replace the EXPO_PUBLIC_IP_ADDRESS in .env with your own
+use ipconfig in a terminal to find your ip address
 
 ##frontend
 make sure to run npm install expo

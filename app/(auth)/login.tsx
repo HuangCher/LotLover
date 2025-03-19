@@ -3,8 +3,12 @@ import React, { useState } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from "expo-router";
+<<<<<<< Updated upstream
+
+export default function LoginScreen() { 
+    const router = useRouter();
+=======
 import axios from "axios";
-import {IP_ADDRESS} from '@env'
 
 export default function LoginScreen() { 
     const router = useRouter();
@@ -12,7 +16,7 @@ export default function LoginScreen() {
     const [password, setPassword] = useState(""); 
 
     const handleLogin = () => {
-        axios.post(`http://${IP_ADDRESS}:5050/record/login`, { username, password })
+        axios.post(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:5050/record/login`, { username, password })
         .then((res) => {
             if (res.data.success) {
                 router.replace("/(tabs)/map"); 
@@ -22,8 +26,10 @@ export default function LoginScreen() {
         })
         .catch((err) => {
             Alert.alert("Error", "Something went wrong. Try again.");
+            console.log(err)
         });
     };
+>>>>>>> Stashed changes
 
     return (
         <View >
