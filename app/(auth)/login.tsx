@@ -15,12 +15,10 @@ export default function LoginScreen() {
         .then((res) => {
             if (res.data.success) {
                 router.replace("/(tabs)/map"); 
-            } else {
-                Alert.alert("Login Failed", "Invalid username or password.");
             }
         })
         .catch((err) => {
-            Alert.alert("Error", "Something went wrong. Try again.");
+            Alert.alert("Login Failed", "Invalid username or password.");
             console.log(err)
         });
     };

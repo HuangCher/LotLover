@@ -5,13 +5,13 @@ import { ObjectId } from "mongodb";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  let collection = await db.collection("records");
+  let collection = await db.collection("user accounts");
   let results = await collection.find({}).toArray();
   res.status(200).send(results);
 });
 
 router.get("/:username", async (req, res) => {
-  let collection = await db.collection("records");
+  let collection = await db.collection("user accounts");
   let query = { username: new String(req.params.username) };
   let result = await collection.findOne(query);
 
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
       pass_level: req.body.pass_level,
       ufid: req.body.ufid,
     };
-    let collection = await db.collection("records");
+    let collection = await db.collection("user accounts");
     let result = await collection.insertOne(newDocument);
 
     res.status(204).send(result);
@@ -49,7 +49,7 @@ router.patch("/:username", async (req, res) => {
       },
     };
 
-    let collection = await db.collection("records");
+    let collection = await db.collection("user accounts");
     let result = await collection.updateOne(query, updates);
 
     res.status(200).send(result);
@@ -62,7 +62,7 @@ router.patch("/:username", async (req, res) => {
 router.delete("/:username", async (req, res) => {
   try {
     const query = { username: new String(req.params.username) };
-    const collection = db.collection("records");
+    const collection = db.collection("user accounts");
 
     let result = await collection.deleteOne(query);
 
