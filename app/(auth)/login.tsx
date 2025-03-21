@@ -12,10 +12,8 @@ export default function LoginScreen() {
 
     const handleLogin = () => {
         axios.post(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:5050/record/login`, { username, password })
-        .then((res) => {
-            if (res.data.success) {
-                router.replace("/(tabs)/map"); 
-            }
+        .then(() => {
+            router.replace("/(tabs)/map"); 
         })
         .catch((err) => {
             Alert.alert("Login Failed", "Invalid username or password.");
@@ -25,7 +23,7 @@ export default function LoginScreen() {
     return (
         <View >
             <Text style={{ fontSize: 24, marginBottom: 20 }}>Login</Text>
-            <TextInput placeholder="Email" style={inputBox} onChangeText={setUsername} value={username}/>
+            <TextInput placeholder="Username" style={inputBox} onChangeText={setUsername} value={username}/>
             <TextInput placeholder="Password" style={inputBox} secureTextEntry onChangeText={setPassword} value={password} />
             <Button title="Login" onPress={handleLogin} />
             <Button title="No Account" onPress={() => router.push("/(auth)/signup")} />
