@@ -16,6 +16,9 @@ npm install axios
 npm install --save-dev @types/axios
 expo-splash-screen
 
+npm install react-native-vector-icons
+npm install react-native-element-dropdown 
+
 ##backend:
 make sure to whitelist yourself on mongoDB
 run npm install mongodb express cors
