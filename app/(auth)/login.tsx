@@ -33,7 +33,7 @@ export default function LoginScreen() {
 
             {/* Logo */}
             <Image
-            source={require('/Users/alissaadams/LotLover/assets/images/LotLover_Logo.png')}
+            source={require('../../assets/images/LotLover_Logo.png')}
             style={styles.logoImage}
             />
 

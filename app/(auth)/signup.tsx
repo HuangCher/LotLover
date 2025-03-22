@@ -60,9 +60,9 @@ export default function SignupScreen() {
             <View style={styles.wavyLine2} />
             <View style={styles.wavyLine3} />
 
-            {/* Logo */}
+            {/* Logo */}  
             <Image
-            source={require('/Users/alissaadams/LotLover/assets/images/LotLover_Logo.png')}
+            source={require('../../assets/images/LotLover_Logo.png')}
             style={styles.logoImage}
             />
 
