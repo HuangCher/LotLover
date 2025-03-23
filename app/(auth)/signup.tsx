@@ -89,7 +89,7 @@ export default function SignupScreen() {
 
         
             {/* Sign Up Button */}
-            <TouchableOpacity style={styles.button} onPress={() => router.replace("/(tabs)/map")}>
+            <TouchableOpacity style={styles.button} onPress={handleSignup}> 
                 <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
 
