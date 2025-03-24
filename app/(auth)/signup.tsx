@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, Image, TouchableOpacity, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -67,10 +67,9 @@ export default function SignupScreen() {
             />
 
             {/* Input Boxes */}
-            <TextInput placeholder="Username" placeholderTextColor={'#d0d0d0'} style={inputBox} />
-            <TextInput placeholder="Password" placeholderTextColor={'#d0d0d0'} style={inputBox} secureTextEntry />
-            <TextInput placeholder="UFID" placeholderTextColor={'#d0d0d0'} style={inputBox} onChangeText={setUfid} value={ufid}/>
-
+            <TextInput placeholder="Username" placeholderTextColor="gray" style={inputBox} onChangeText={setUsername} value={username}/>
+            <TextInput placeholder="Password" placeholderTextColor="gray" style={inputBox} secureTextEntry onChangeText={setPassword} value={password} />
+            <TextInput placeholder="UFID" placeholderTextColor="gray" style={inputBox} onChangeText={setUfid} value={ufid}/>
 
             {/* Dropdown menu */}
             <Dropdown
@@ -82,10 +81,14 @@ export default function SignupScreen() {
             onChange={item => setPass_level(item.value)}
             style={inputBox}
             containerStyle={{ marginTop: 10 }}
-            placeholderStyle={{ color: '#d0d0d0' }}
-            selectedTextStyle={{ color: '#000000' }}
+            placeholderStyle={{ color: 'gray' , fontSize: 14 }}
+            selectedTextStyle={{ color: '#000000' , fontSize: 14 }}
             maxHeight={150} 
             />
+            {/* change parking pass to dropdown ^^ this should replace the line below*/}
+            
+            {/* <TextInput placeholder="Parsking Pass" placeholderTextColor="gray" style={inputBox} onChangeText={setPass_level} value={pass_level} />  */}
+
 
         
             {/* Sign Up Button */}
@@ -99,6 +102,7 @@ export default function SignupScreen() {
             {/* If already have an account, login */}
             <Text style={styles.descriptiveText}>Already have an account?</Text>
             <Button title="Login" onPress={() => router.push("/(auth)/login")} />
+
 
         </View>
     );

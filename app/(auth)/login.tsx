@@ -38,9 +38,9 @@ export default function LoginScreen() {
             />
 
             {/* Inputs */}
-            <TextInput placeholder="Email" placeholderTextColor={'#d0d0d0'} style={inputBox} onChangeText={setUsername} value={username}/>
-            <TextInput placeholder="Password" placeholderTextColor={'#d0d0d0'} style={inputBox} secureTextEntry onChangeText={setPassword} value={password} />
-            
+            <TextInput placeholder="Email" placeholderTextColor={'gray'} style={inputBox} onChangeText={setUsername} value={username}/>
+            <TextInput placeholder="Password" placeholderTextColor={'gray'} style={inputBox} secureTextEntry onChangeText={setPassword} value={password} />
+             
         
             {/* Login Button */}
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
@@ -52,7 +52,7 @@ export default function LoginScreen() {
 
             {/* If no account, sign up */}
             <Text style={styles.descriptiveText}>Don't have an account yet?</Text>
-            <Button style={styles.signUpButton} title="Sign Up" onPress={() => router.push("/(auth)/signup")} />
+            <Button title="Sign Up" onPress={() => router.push("/(auth)/signup")} />
         </View>
     );
 }
