@@ -12,6 +12,7 @@ npm install --save-dev @types/axios
 npm install expo-splash-screen
 npm install react-native-vector-icons
 npm install react-native-element-dropdown 
+npx expo install react-native-maps
 
 run npm install expo
 npm start to get expo to appear

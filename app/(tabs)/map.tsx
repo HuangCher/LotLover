@@ -1,9 +1,10 @@
-import { View, Text, TextInput, Button } from 'react-native';
-import React from 'react';
+import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from "expo-router";
-
+import MapView, { Marker, Callout } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 // parkingLots is our list that contains all the parking lots 
 // and their information
@@ -221,10 +222,85 @@ const parkingLots = [
   },
 ];
 
-export default function ExploreScreen() {
+export default function MapScreen() {
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // request location permission
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        Alert.alert('Location permission not granted');
+        return;
+      }
+
+      // gets the current location
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      setLocation(currentLocation);
+    })();
+  }, []);
+
+  // check if location is null or undefined and show a loading indicator
+  if (!location) {
     return (
-        <View>
-          <Text>Parking Lot Data Shown</Text>
-        </View>
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  const { latitude, longitude } = location.coords;
+
+    return (
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05
+          }}
+          showsUserLocation={true}>
+          
+          {/* shows the parking lot locations on the map */}
+          {parkingLots.map((lot, index) => (
+            <Marker
+                key={index}
+                coordinate={{ latitude: lot.latitude, longitude: lot.longitude }}
+                title={lot.name} 
+              >
+                {/* display the parking lot name and information */}
+                <Callout>
+                  <View style={{ width: 200 }}>
+                    <Text style={{ fontWeight: 'bold' }}>{lot.name}</Text>
+                    <Text>Pass Level: {lot.passLevel}</Text>
+                    <Text>Hours: {lot.hours}</Text>
+                  </View>
+                </Callout>
+            </Marker>
+          ))}
+          
+          {/* add a dropdowmn here with filtering */}
+          <Text style={styles.info}> PUT DROPDOWN HERE WITH FILTERING </Text>  
+        </MapView>
+      </View>
     );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // paddingTop: 50,    
+  },
+  map: {
+    flex: 1,
+  },
+  info: {
+    position: 'absolute',
+    top: 10,
+    color: 'white',
+  },
+});
