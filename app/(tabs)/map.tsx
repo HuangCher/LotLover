@@ -282,10 +282,10 @@ export default function MapScreen() {
                 </Callout>
             </Marker>
           ))}
-          
-          {/* add a dropdowmn here with filtering */}
-          <Text style={styles.info}> PUT DROPDOWN HERE WITH FILTERING </Text>  
         </MapView>
+
+        {/* add a dropdowmn here with filtering */}
+          <Text style={styles.info}> PUT DROPDOWN HERE WITH FILTERING </Text>
       </View>
     );
 };
