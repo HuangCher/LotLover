@@ -222,10 +222,57 @@ const parkingLots = [
   },
 ];
 
+// This function will take in the base parking lot list and
+// depending on the user's filtering selection, we will produce a 
+// new list that will contain all options the user still has selected
+// since in the beginning we will have all options selected
+// and as the user selects/deselects options, we will filter the list
+
+/**
+ * Filters a list of parking lots by the specified pass level.
+ *
+ * @param parkingLots - Array of ParkingLot objects to filter.
+ * @param filter - Pass level to filter by. If empty or whitespace, returns the original list.
+ * @returns Array of ParkingLot objects whose passLevel includes the filter.
+ */
+export interface ParkingLot {
+  name: string;
+  latitude: number;
+  longitude: number;
+  passLevel: string;    // e.g. "Gold/Silver" or "Orange/Blue/Green"
+  hours: string;
+}
+// Filters the parkingLots based on the user's pass level.
+// The `username` parameter is included for whatever logging/analytics
+// you may want to do – it isn't used to filter the lots themselves.
+export function filterLotsByUser(
+  parkingLots: ParkingLot[],
+  username: string,
+  userPassLevel: string
+): ParkingLot[] {
+  // if user didn't supply a pass level, return all lots
+  if (!userPassLevel.trim()) {
+    // Case where user never filled out a pass level
+    console.debug(`filterLotsByUser: no pass level set for ${username}, returning all lots`);
+    
+    return parkingLots;
+  }
+
+  // otherwise only keep lots whose passLevel string,
+  // when split on "/", contains the user's pass
+  return parkingLots.filter(lot => {
+    const levels = lot.passLevel
+      .split(/\s*\/\s*/)    // split on "/", trimming spaces
+      .map(l => l.trim());  // ensure no stray whitespace
+
+    return levels.includes(userPassLevel);
+  });
+}
+
 export default function MapScreen() {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  
   // request location permission
   useEffect(() => {
     (async () => {
@@ -265,7 +312,13 @@ export default function MapScreen() {
           }}
           showsUserLocation={true}>
           
-          {/* shows the parking lot locations on the map */}
+          {/* shows the parking lot locations on the map */
+          /*
+            We will now use the filtering function to filter the parking lots
+            on the map based on the user's selection in the dropdown.
+          */
+          }
+
           {parkingLots.map((lot, index) => (
             <Marker
                 key={index}
