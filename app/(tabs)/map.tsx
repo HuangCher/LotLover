@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from "expo-router";
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
+import { MultiSelect, Dropdown } from 'react-native-element-dropdown';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // parkingLots is our list that contains all the parking lots 
 // and their information
@@ -222,6 +224,18 @@ const parkingLots = [
   },
 ];
 
+const parkingPasses = [
+  { label: 'Green', value: 'Green' },
+  { label: 'Park & Ride', value: 'Park & Ride' },
+  { label: 'Red 1', value: 'Red 1' },
+  { label: 'Red 3', value: 'Red 3' },
+  { label: 'Brown 2', value: 'Brown 2' },
+  { label: 'Brown 3', value: 'Brown 3' },
+  { label: 'Disabled Student', value: 'Disabled Student' },
+  { label: 'Motorcycle/Scooter', value: 'Motorcycle/Scooter' },
+];
+
+
 // This function will take in the base parking lot list and
 // depending on the user's filtering selection, we will produce a 
 // new list that will contain all options the user still has selected
@@ -272,7 +286,8 @@ export function filterLotsByUser(
 export default function MapScreen() {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  
+  const [passes, setPasses] = useState<string[]>([]); // will hold the selected pass levels from the dropdown
+
   // request location permission
   useEffect(() => {
     (async () => {
@@ -337,23 +352,78 @@ export default function MapScreen() {
           ))}
         </MapView>
 
-        {/* add a dropdowmn here with filtering */}
-          <Text style={styles.info}> PUT DROPDOWN HERE WITH FILTERING </Text>
+        <View style={styles.dropdownContainer}>
+          <MultiSelect
+            style={styles.dropdown}
+            data={parkingPasses}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Pass"
+            value={passes}
+            onChange={item => {
+              setPasses(item);
+            }}
+            placeholderStyle={{ color: 'gray' , fontSize: 15 }}
+            selectedTextStyle={{ color: '#000000' , fontSize: 14 }}
+            selectedStyle={styles.selectedStyle}
+            maxHeight={180}
+            inside
+            renderSelectedItem={(item) => (
+              <View style={styles.selectedItemStyle}>
+                <Text style={styles.selectedTextStyle}>{item.label}</Text>
+              </View>
+            )}
+          />
+        </View>
       </View>
+      
     );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: 50,    
+    //paddingTop: 175,    
   },
+
   map: {
     flex: 1,
   },
+
   info: {
     position: 'absolute',
     top: 10,
     color: 'white',
   },
+
+  dropdown: {
+    borderWidth: 0,
+    borderColor: "black",
+    backgroundColor: "#f0f0f0",
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 10,
+    width: 370,
+  },
+
+  dropdownContainer: {
+    position: 'absolute',
+    top: 15,
+    left: 10,
+  },
+
+  selectedStyle: {
+    borderRadius: 12,
+  },
+
+  selectedItemStyle: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+    padding: 5,
+    margin: 3,
+  },
+
+  selectedTextStyle: {
+    fontSize: 14,
+  }
 });

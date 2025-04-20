@@ -39,7 +39,7 @@ export default function LoginScreen() {
             />
 
             {/* Inputs */}
-            <TextInput placeholder="Email" placeholderTextColor={'gray'} style={inputBox} onChangeText={setUsername} value={username}/>
+            <TextInput placeholder="Username" placeholderTextColor={'gray'} style={inputBox} onChangeText={setUsername} value={username}/>
             <TextInput placeholder="Password" placeholderTextColor={'gray'} style={inputBox} secureTextEntry onChangeText={setPassword} value={password} />
               
         
