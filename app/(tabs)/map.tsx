@@ -222,6 +222,118 @@ const parkingLots = [
     passLevel: "Brown",
     hours: "All Day",
   },
+  {
+    name: "Flavet Field",
+    latitude: 29.6466255,
+    longitude: -82.3543578,
+    passLevel: "Green",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Park & Ride Lot #1",
+    latitude: 29.637141,
+    longitude: -82.368431,
+    passLevel: "Park & Ride",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Hume Hall Lot",
+    latitude: 29.6449555,
+    longitude: -82.3522077,
+    passLevel: "Red 1",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Simpson Hall Lot",
+    latitude: 29.6454476,
+    longitude: -82.3502699,
+    passLevel: "Red 3",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Corry Village Lot",
+    latitude: 29.646111,    
+    longitude: -82.361111, 
+    passLevel: "Brown 2",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Diamond Village Lot",
+    latitude: 29.648250,
+    longitude: -82.353519,
+    passLevel: "Brown 3",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Turlington Hall Disabled",
+    latitude: 29.6489642,
+    longitude: -82.3465201,
+    passLevel: "Disabled Student",
+    hours: "All Day",
+  },
+  {
+    name: "Inner Road – Broward Hall Scooter Parking",
+    latitude: 29.6465352,
+    longitude: -82.3420708,
+    passLevel: "Motorcycle/Scooter",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Garage 14 – Upper Levels",
+    latitude: 29.642205,
+    longitude: -82.351255,
+    passLevel: "Green",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Green permits park on floors 4+ 
+  },
+  {
+    name: "Park & Ride Lot #2 (SW 34th St)",
+    latitude: 29.637500,
+    longitude: -82.336200,
+    passLevel: "Park & Ride",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Park & Ride decals valid off‑core lots 
+  },
+  {
+    name: "Sorority Row Lot",
+    latitude: 29.645900,
+    longitude: -82.349600,
+    passLevel: "Red 1",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Red 1 lots scattered near Greek housing 
+  },
+  {
+    name: "Fraternity Row Surface Lot",
+    latitude: 29.646200,
+    longitude: -82.350100,
+    passLevel: "Red 3",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Red 3 lots serve under‑50‑credit on‑campus 
+  },
+  {
+    name: "Maguire Village Parking Lot",
+    latitude: 29.646800,
+    longitude: -82.360900,
+    passLevel: "Brown 2",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Brown 2 zones cover Maguire/Corry/University Village Family Housing 
+  },
+  {
+    name: "University Village South Lot",
+    latitude: 29.647200,
+    longitude: -82.353800,
+    passLevel: "Brown 3",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Brown 3 only for Diamond Family Housing 
+  },
+  {
+    name: "Century Tower Disabled Parking",
+    latitude: 29.647950,
+    longitude: -82.344100,
+    passLevel: "Disabled Student",
+    hours: "All Day", // Disabled student placards valid in any Blue/Orange/Green/Red/Brown‑restricted lot 
+  },
+  {
+    name: "Broward Hall Scooter Parking Zone",
+    latitude: 29.646500,
+    longitude: -82.342000,
+    passLevel: "Motorcycle/Scooter",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Two‑wheel decals park in designated scooter areas 
+  },
 ];
 
 const parkingPasses = [
