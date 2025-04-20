@@ -259,35 +259,34 @@ export interface ParkingLot {
 // Filters the parkingLots based on the user's pass level.
 // The `username` parameter is included for whatever logging/analytics
 // you may want to do – it isn't used to filter the lots themselves.
-export function filterLotsByUser(
+export function filterLotsByPassLevel(
+
   parkingLots: ParkingLot[],
-  username: string,
-  userPassLevel: string
+
+  selectedPassLevels: string[]
+
 ): ParkingLot[] {
-  // if user didn't supply a pass level, return all lots
-  if (!userPassLevel.trim()) {
-    // Case where user never filled out a pass level
-    console.debug(`filterLotsByUser: no pass level set for ${username}, returning all lots`);
-    
-    return parkingLots;
-  }
-
-  // otherwise only keep lots whose passLevel string,
-  // when split on "/", contains the user's pass
-  return parkingLots.filter(lot => {
-    const levels = lot.passLevel
-      .split(/\s*\/\s*/)    // split on "/", trimming spaces
-      .map(l => l.trim());  // ensure no stray whitespace
-
-    return levels.includes(userPassLevel);
-  });
+    // if nothing selected, show everything
+    if (selectedPassLevels.length === 0) {
+      return parkingLots;
+    }
+  
+    return parkingLots.filter(lot => {
+      // split the lot’s passLevel string into an array
+      const lotLevels = lot.passLevel
+        .split(/\s*\/\s*/)   // e.g. "Orange/Blue" → ["Orange","Blue"]
+        .map(l => l.trim());
+  
+      // keep this lot if *any* of the user’s selected passes matches
+      return selectedPassLevels.some(pass => lotLevels.includes(pass));
+    });
 }
 
 export default function MapScreen() {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [passes, setPasses] = useState<string[]>([]); // will hold the selected pass levels from the dropdown
-
+  const filteredLots = filterLotsByPassLevel(parkingLots, passes); // Compute the filtered list based on the dropdown
   // request location permission
   useEffect(() => {
     (async () => {
@@ -334,7 +333,7 @@ export default function MapScreen() {
           */
           }
 
-          {parkingLots.map((lot, index) => (
+          {filteredLots.map((lot, index) => (
             <Marker
                 key={index}
                 coordinate={{ latitude: lot.latitude, longitude: lot.longitude }}
