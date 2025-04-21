@@ -345,6 +345,13 @@ const parkingPasses = [
   { label: 'Brown 3', value: 'Brown 3' },
   { label: 'Disabled Student', value: 'Disabled Student' },
   { label: 'Motorcycle/Scooter', value: 'Motorcycle/Scooter' },
+  { label: 'Orange', value: 'Orange' },
+  { label: 'Blue', value: 'Blue' },
+  { label: 'Visitor', value: 'Visitor' },
+  { label: 'Red', value: 'Red' },
+  { label: 'Brown', value: 'Brown' },
+  { label: 'Gold', value: 'Gold' },
+  { label: 'Silver', value: 'Silver' },
 ];
 
 
