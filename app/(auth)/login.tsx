@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from "expo-router";
 import axios from "axios";
 import { StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() { 
     const router = useRouter();
@@ -14,6 +15,9 @@ export default function LoginScreen() {
     const handleLogin = () => {
         axios.post(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:5050/record/login`, { username, password })
         .then(() => {
+            // store the in AsyncStorage
+            AsyncStorage.setItem('username', username);
+            AsyncStorage.setItem('password', password);
             router.replace("/(tabs)/map"); 
         })
         .catch((err) => {

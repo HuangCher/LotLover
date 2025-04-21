@@ -11,7 +11,7 @@ if prompted use ```npx expo install```
 
 ```npx expo install react-native-maps```
 
-
+```npm install @react-native-async-storage/async-storage```
 ```npm start``` to get expo to appear
 
 download expo-go on your moblie device and scan the QR code
