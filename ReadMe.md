@@ -1,29 +1,31 @@
 ### START HERE
 
-**make sure you replace the EXPO_PUBLIC_IP_ADDRESS in .env with your own
-use ipconfig in a terminal to find your ip address**
+**make sure you replace the EXPO_PUBLIC_IP_ADDRESS in .env with your own**
 
-## Frontend
-if prompted use ```npx expo install```
+**use ```ipconfig``` in a terminal to find your ip address**
+
+## Frontend:
+
+if prompted when running the below commands, use ```npx expo install```
 
 
-```npm install expo react-native-vector-icons expo-router axios --save-dev @types/axios expo-splash-screen react-native-vector-icons react-native-element-dropdown```
+run ```npm install expo react-native-vector-icons expo-router axios --save-dev @types/axios expo-splash-screen react-native-vector-icons react-native-element-dropdown @react-native-async-storage/async-storage```
 
-```npx expo install react-native-maps```
+run ```npx expo install react-native-maps```
 
-```npm install @react-native-async-storage/async-storage```
-```npm start``` to get expo to appear
+run ```npm start``` to get expo to appear
 
 download expo-go on your moblie device and scan the QR code
 
 use ```r``` to reload for quick testing
 
 ## Backend:
-run npm install mongodb express cors
+
+run ```npm install mongodb express cors```
 
 
 whitelist yourself on mongoDB
 
-cd into server
+cd into the server directory
 
 run ```node --env-file=config.env server```
