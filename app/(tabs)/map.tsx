@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { Linking, Platform, View, Text, TextInput, Button, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -433,6 +433,20 @@ export default function MapScreen() {
 
   const { latitude, longitude } = location.coords;
 
+  const handleGetDirections = async (lat: number, lon: number) => {
+    const destination = `${lat},${lon}`;
+    // create the app URLs
+    const appleMapsURL  = `maps://?daddr=${destination}`; // ios
+    const googleMapsURL = `google.navigation:q=${destination}`; // android 
+
+    // picks the native URL
+    let url = Platform.OS === 'ios' ? appleMapsURL : googleMapsURL;
+  
+    Linking.openURL(url).catch(err => {
+      Alert.alert('Error', 'Unable to open maps app.');
+    });
+  };
+
     return (
       <View style={styles.container}>
         <MapView
@@ -457,6 +471,7 @@ export default function MapScreen() {
                 key={index}
                 coordinate={{ latitude: lot.latitude, longitude: lot.longitude }}
                 title={lot.name} 
+                onCalloutPress={() => handleGetDirections(lot.latitude, lot.longitude)}
               >
                 {/* display the parking lot name and information */}
                 <Callout>
@@ -464,6 +479,9 @@ export default function MapScreen() {
                     <Text style={{ fontWeight: 'bold' }}>{lot.name}</Text>
                     <Text>Pass Level: {lot.passLevel}</Text>
                     <Text>Hours: {lot.hours}</Text>
+                    <Text style={styles.directions}>
+                      Directions
+                    </Text>
                   </View>
                 </Callout>
             </Marker>
@@ -513,7 +531,7 @@ const styles = StyleSheet.create({
     top: 10,
     color: 'white',
   },
-
+  
   dropdown: {
     borderWidth: 0,
     borderColor: "black",
@@ -543,5 +561,13 @@ const styles = StyleSheet.create({
 
   selectedTextStyle: {
     fontSize: 14,
+  },
+        
+  directions: {
+    marginTop: 8,
+    color: '#FB8500',
+    textDecorationLine: 'underline',
+    fontWeight: 'bold',
+    textAlign: 'center',
   }
 });
