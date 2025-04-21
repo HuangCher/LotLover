@@ -20,15 +20,23 @@ export default function TabLayout() {
         options={{
           title: 'Map',
           tabBarIcon: ({ color }) => 
-            <Ionicons name="accessibility-outline" size={28} color={color} />,
+            <Ionicons name="map" size={28} color={color} />,
         }}
       />
+              <Tabs.Screen
+        name="transactions"
+        options={{
+          title: 'Contribute',
+          tabBarIcon: ({ color }) => 
+            <Ionicons name="wallet-outline" size={28} color={color} />,
+        }}
+        />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => 
-            <Ionicons name="accessibility-outline" size={28} color={color} />,
+            <Ionicons name="person-circle-outline" size={28} color={color} />,
         }}
       />
     </Tabs>

@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:username", async (req, res) => {
   let collection = await db.collection("user accounts");
-  let query = { username: new String(req.params.username) };
+  let query = { username: req.params.username };
   let result = await collection.findOne(query);
 
   if (!result) res.status(404).send("User not found");
@@ -61,7 +61,7 @@ router.patch("/:username", async (req, res) => {
 
 router.delete("/:username", async (req, res) => {
   try {
-    const query = { username: new String(req.params.username) };
+    const query = { username: req.params.username };
     const collection = db.collection("user accounts");
 
     let result = await collection.deleteOne(query);
