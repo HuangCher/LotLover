@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from "expo-router";
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
+import { MultiSelect, Dropdown } from 'react-native-element-dropdown';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // parkingLots is our list that contains all the parking lots 
 // and their information
@@ -220,12 +222,190 @@ const parkingLots = [
     passLevel: "Brown",
     hours: "All Day",
   },
+  {
+    name: "Flavet Field",
+    latitude: 29.6466255,
+    longitude: -82.3543578,
+    passLevel: "Green",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Park & Ride Lot #1",
+    latitude: 29.637141,
+    longitude: -82.368431,
+    passLevel: "Park & Ride",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Hume Hall Lot",
+    latitude: 29.6449555,
+    longitude: -82.3522077,
+    passLevel: "Red 1",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Simpson Hall Lot",
+    latitude: 29.6454476,
+    longitude: -82.3502699,
+    passLevel: "Red 3",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Corry Village Lot",
+    latitude: 29.646111,    
+    longitude: -82.361111, 
+    passLevel: "Brown 2",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Diamond Village Lot",
+    latitude: 29.648250,
+    longitude: -82.353519,
+    passLevel: "Brown 3",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Turlington Hall Disabled",
+    latitude: 29.6489642,
+    longitude: -82.3465201,
+    passLevel: "Disabled Student",
+    hours: "All Day",
+  },
+  {
+    name: "Inner Road – Broward Hall Scooter Parking",
+    latitude: 29.6465352,
+    longitude: -82.3420708,
+    passLevel: "Motorcycle/Scooter",
+    hours: "7:30am - 4:30pm",
+  },
+  {
+    name: "Garage 14 – Upper Levels",
+    latitude: 29.642205,
+    longitude: -82.351255,
+    passLevel: "Green",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Green permits park on floors 4+ 
+  },
+  {
+    name: "Park & Ride Lot #2 (SW 34th St)",
+    latitude: 29.637500,
+    longitude: -82.336200,
+    passLevel: "Park & Ride",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Park & Ride decals valid off‑core lots 
+  },
+  {
+    name: "Sorority Row Lot",
+    latitude: 29.645900,
+    longitude: -82.349600,
+    passLevel: "Red 1",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Red 1 lots scattered near Greek housing 
+  },
+  {
+    name: "Fraternity Row Surface Lot",
+    latitude: 29.646200,
+    longitude: -82.350100,
+    passLevel: "Red 3",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Red 3 lots serve under‑50‑credit on‑campus 
+  },
+  {
+    name: "Maguire Village Parking Lot",
+    latitude: 29.646800,
+    longitude: -82.360900,
+    passLevel: "Brown 2",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Brown 2 zones cover Maguire/Corry/University Village Family Housing 
+  },
+  {
+    name: "University Village South Lot",
+    latitude: 29.647200,
+    longitude: -82.353800,
+    passLevel: "Brown 3",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Brown 3 only for Diamond Family Housing 
+  },
+  {
+    name: "Century Tower Disabled Parking",
+    latitude: 29.647950,
+    longitude: -82.344100,
+    passLevel: "Disabled Student",
+    hours: "All Day", // Disabled student placards valid in any Blue/Orange/Green/Red/Brown‑restricted lot 
+  },
+  {
+    name: "Broward Hall Scooter Parking Zone",
+    latitude: 29.646500,
+    longitude: -82.342000,
+    passLevel: "Motorcycle/Scooter",
+    hours: "Mon–Fri 7:30am - 4:30pm", // Two‑wheel decals park in designated scooter areas 
+  },
 ];
+
+const parkingPasses = [
+  { label: 'Green', value: 'Green' },
+  { label: 'Park & Ride', value: 'Park & Ride' },
+  { label: 'Red 1', value: 'Red 1' },
+  { label: 'Red 3', value: 'Red 3' },
+  { label: 'Brown 2', value: 'Brown 2' },
+  { label: 'Brown 3', value: 'Brown 3' },
+  { label: 'Disabled Student', value: 'Disabled Student' },
+  { label: 'Motorcycle/Scooter', value: 'Motorcycle/Scooter' },
+  { label: 'Orange', value: 'Orange' },
+  { label: 'Blue', value: 'Blue' },
+  { label: 'Visitor', value: 'Visitor' },
+  { label: 'Red', value: 'Red' },
+  { label: 'Brown', value: 'Brown' },
+  { label: 'Gold', value: 'Gold' },
+  { label: 'Silver', value: 'Silver' },
+];
+
+
+// This function will take in the base parking lot list and
+// depending on the user's filtering selection, we will produce a 
+// new list that will contain all options the user still has selected
+// since in the beginning we will have all options selected
+// and as the user selects/deselects options, we will filter the list
+
+/**
+ * Filters a list of parking lots by the specified pass level.
+ *
+ * @param parkingLots - Array of ParkingLot objects to filter.
+ * @param filter - Pass level to filter by. If empty or whitespace, returns the original list.
+ * @returns Array of ParkingLot objects whose passLevel includes the filter.
+ */
+export interface ParkingLot {
+  name: string;
+  latitude: number;
+  longitude: number;
+  passLevel: string;    // e.g. "Gold/Silver" or "Orange/Blue/Green"
+  hours: string;
+}
+// Filters the parkingLots based on the user's pass level.
+// The `username` parameter is included for whatever logging/analytics
+// you may want to do – it isn't used to filter the lots themselves.
+export function filterLotsByPassLevel(
+
+  parkingLots: ParkingLot[],
+
+  selectedPassLevels: string[]
+
+): ParkingLot[] {
+    // if nothing selected, show everything
+    if (selectedPassLevels.length === 0) {
+      return parkingLots;
+    }
+  
+    return parkingLots.filter(lot => {
+      // split the lot’s passLevel string into an array
+      const lotLevels = lot.passLevel
+        .split(/\s*\/\s*/)   // e.g. "Orange/Blue" → ["Orange","Blue"]
+        .map(l => l.trim());
+  
+      // keep this lot if *any* of the user’s selected passes matches
+      return selectedPassLevels.some(pass => lotLevels.includes(pass));
+    });
+}
 
 export default function MapScreen() {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  const [passes, setPasses] = useState<string[]>([]); // will hold the selected pass levels from the dropdown
+  const filteredLots = filterLotsByPassLevel(parkingLots, passes); // Compute the filtered list based on the dropdown
   // request location permission
   useEffect(() => {
     (async () => {
@@ -279,8 +459,14 @@ export default function MapScreen() {
           }}
           showsUserLocation={true}>
           
-          {/* shows the parking lot locations on the map */}
-          {parkingLots.map((lot, index) => (
+          {/* shows the parking lot locations on the map */
+          /*
+            We will now use the filtering function to filter the parking lots
+            on the map based on the user's selection in the dropdown.
+          */
+          }
+
+          {filteredLots.map((lot, index) => (
             <Marker
                 key={index}
                 coordinate={{ latitude: lot.latitude, longitude: lot.longitude }}
@@ -302,16 +488,38 @@ export default function MapScreen() {
           ))}
         </MapView>
 
-        {/* add a dropdowmn here with filtering */}
-          <Text style={styles.info}> PUT DROPDOWN HERE WITH FILTERING </Text>
+        <View style={styles.dropdownContainer}>
+          <MultiSelect
+            style={styles.dropdown}
+            data={parkingPasses}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Pass"
+            value={passes}
+            onChange={item => {
+              setPasses(item);
+            }}
+            placeholderStyle={{ color: 'gray' , fontSize: 15 }}
+            selectedTextStyle={{ color: '#000000' , fontSize: 14 }}
+            selectedStyle={styles.selectedStyle}
+            maxHeight={180}
+            inside
+            renderSelectedItem={(item) => (
+              <View style={styles.selectedItemStyle}>
+                <Text style={styles.selectedTextStyle}>{item.label}</Text>
+              </View>
+            )}
+          />
+        </View>
       </View>
+      
     );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: 50,    
+    //paddingTop: 175,    
   },
 
   map: {
@@ -323,13 +531,43 @@ const styles = StyleSheet.create({
     top: 10,
     color: 'white',
   },
+  
+  dropdown: {
+    borderWidth: 0,
+    borderColor: "black",
+    backgroundColor: "#f0f0f0",
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 10,
+    width: 370,
+  },
 
+  dropdownContainer: {
+    position: 'absolute',
+    top: 15,
+    left: 10,
+  },
+
+  selectedStyle: {
+    borderRadius: 12,
+  },
+
+  selectedItemStyle: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+    padding: 5,
+    margin: 3,
+  },
+
+  selectedTextStyle: {
+    fontSize: 14,
+  },
+        
   directions: {
     marginTop: 8,
     color: '#FB8500',
     textDecorationLine: 'underline',
     fontWeight: 'bold',
     textAlign: 'center',
-  },
-
+  }
 });

@@ -11,7 +11,8 @@ export default function LoginScreen() {
     const [username, setUsername] = useState(""); 
     const [password, setPassword] = useState("");  
 
-    const handleLogin = () => {
+    const handleLogin = () => 
+    {
         axios.post(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:5050/record/login`, { username, password })
         .then(() => {
             router.replace("/(tabs)/map"); 
@@ -38,9 +39,9 @@ export default function LoginScreen() {
             />
 
             {/* Inputs */}
-            <TextInput placeholder="Email" placeholderTextColor={'gray'} style={inputBox} onChangeText={setUsername} value={username}/>
+            <TextInput placeholder="Username" placeholderTextColor={'gray'} style={inputBox} onChangeText={setUsername} value={username}/>
             <TextInput placeholder="Password" placeholderTextColor={'gray'} style={inputBox} secureTextEntry onChangeText={setPassword} value={password} />
-             
+              
         
             {/* Login Button */}
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
