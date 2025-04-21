@@ -1,47 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Dropdown } from 'react-native-element-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-const parkingPasses = [
-  { label: 'Green', value: 'Green' },
-  { label: 'Park & Ride', value: 'Park & Ride' },
-  { label: 'Red 1', value: 'Red 1' },
-  { label: 'Red 3', value: 'Red 3' },
-  { label: 'Brown 2', value: 'Brown 2' },
-  { label: 'Brown 3', value: 'Brown 3' },
-  { label: 'Disabled Student', value: 'Disabled Student' },
-  { label: 'Motorcycle/Scooter', value: 'Motorcycle/Scooter' },
-];
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen() {
   const [pass_level, setPass_level] = useState(""); 
   const router = useRouter();
 
-  // Placeholder vals
-  const [username, setUsername] = useState('john_doe');
-  const [password, setPassword] = useState('password1');
-  const [passLevel, setPassLevel] = useState('Green');
-  const [ufid, setUfid] = useState('11111111');
-  const [isEditing, setIsEditing] = useState(false);
-  
-  // For viewing the password
+  const [currentUsername, setCurrentUsername] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [passLevel, setPassLevel] = useState('');
+  const [ufid, setUfid] = useState('');
+  // for viewing the password
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleDeleteAccount = () => {
-    // FILL IN TO UPDATE BACKEND 
+  // load user data
+  useEffect(() => {
+    const loadUserData = async () => {
+      // get the username from AsyncStorage
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+
+        if (storedUsername) {
+          // fetch user data from backend
+          const response = await axios.get(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:5050/record/${storedUsername}`);
+          const userData = response.data as { username: string; password: string; pass_level: string; ufid: string };
+
+          // sets the state variables with the fetched data
+          setCurrentUsername(userData.username);
+          setUsername(userData.username);
+          setPassword(userData.password);
+          setPassLevel(userData.pass_level);
+          setUfid(userData.ufid);
+
+        }
+      } catch (error) {
+        console.error('Error loading user data', error);
+      }
+    };
+    
+    loadUserData();
+  }, []);
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('username');
+    router.replace("/(auth)/login");
   };
 
-  const handleUpdateProfile = () => {
-    Alert.alert('Profile Updated', 'Your profile information has been updated!');
-    // FILL IN TO UPDATE BACKEND
-    setIsEditing(false); 
+  const handleDeleteAccount = async () => {
+    // Confirmation dialog before deletion
+    Alert.alert("Delete Account", "Are you sure you want to delete your account?", [
+      { text: "Cancel", style: "cancel"},
+        { text: "Delete", onPress: async () => {
+            try {
+              await axios.delete(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:5050/record/${username}`);
+              await AsyncStorage.removeItem('username');
+              Alert.alert("Account Deleted", "Your account has been deleted.");
+              router.replace("/(auth)/login");
+            } catch (err) {
+              Alert.alert("Acount Deletion Failed", "Try again later.");
+              console.log(err);
+            }
+          } 
+        }
+      ]
+    );
   };
 
   return (
     <View style={styles.container}>
-
       {/* Logo */}
       <Image
         source={require('../../assets/images/LotLover_Logo.png')}
@@ -50,109 +81,64 @@ export default function ProfileScreen() {
 
       {/* Profile Box */}
       <View style={styles.profileBox}>
-
         {/* Username */}
         <View style={styles.row}>
           <Text style={styles.label}>Username:</Text>
-          <TextInput 
-            style={styles.infoBox} 
-            value={username} 
-            editable={isEditing} 
-            onChangeText={setUsername} 
-          />
+          <View style={styles.infoBox}>
+            <Text>{username}</Text>
+          </View>
         </View>
 
-        {/* Password */}
+        {/* Password - shown by default */}
         <View style={styles.row}>
           <Text style={styles.label}>Password:</Text>
           <View style={styles.infoBox}>
-            <TextInput
-              style={[styles.passwordContainer, styles.passwordInput]}
-              value={password}
-              editable={isEditing}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}  // Toggle secureTextEntry based on showPassword
-            />
+          <TextInput
+            style={styles.passwordInput}
+            secureTextEntry={!showPassword} // toggle secureTextEntry based on showPassword
+            value={password}
+            editable={false}
+          />
             {/* Button to toggle password */}
             <TouchableOpacity
               style={styles.eyeButton}
-              onPressIn={() => setShowPassword(true)}  
-              onPressOut={() => setShowPassword(false)} 
+              onPress={() => setShowPassword(prev => !prev)} 
             >
               <FontAwesome 
                 name={showPassword ? 'eye-slash' : 'eye'} 
                 size={20} 
                 color="#023047" 
               />
-            </TouchableOpacity>
+            </TouchableOpacity>          
           </View>
         </View>
 
         {/* Pass Level */}
         <View style={styles.row}>
           <Text style={styles.label}>Pass Level:</Text>
-          {isEditing ? (
-            <Dropdown
-              data={parkingPasses}
-              labelField="label"
-              valueField="value"
-              placeholder="Pass Type"
-              value={pass_level}
-              onChange={item => setPass_level(item.value)}
-              style={styles.dropdown}
-              placeholderStyle={{ color: 'gray', fontSize: 14 }}
-              selectedTextStyle={{ color: '#000000', fontSize: 14 }}
-              maxHeight={150} 
-            />
-          ) : (
-            <Text style={styles.infoBox}>{passLevel || 'No Parking Pass Selected'}</Text>
-          )}
+          <View style={styles.infoBox}>
+            <Text>{passLevel || 'No Parking Pass Selected'}</Text>
+          </View>
         </View>
 
         {/* UFID */}
         <View style={styles.row}>
           <Text style={styles.label}>UFID:</Text>
-          <TextInput
-            style={styles.infoBox}
-            value={ufid}
-            editable={isEditing}
-            onChangeText={setUfid}
-          />
+          <View style={styles.infoBox}>
+            <Text>{ufid}</Text>
+          </View>
         </View>
-
       </View>
 
-      {/* Buttons for editing */}
-      {!isEditing ? (
-        <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
-          <Text style={styles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
-      ) : (
-        <>
-          <TouchableOpacity style={styles.saveButton} onPress={handleUpdateProfile}>
-            <Text style={styles.buttonText}>Save Changes</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.cancelButton} onPress={() => setIsEditing(false)}>
-            <Text style={styles.cancelButtonText}>Cancel</Text>
-          </TouchableOpacity>
-        </>
-      )}
+      {/* Logout button */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutButtonText}>Log Out</Text>
+      </TouchableOpacity>
 
-      {!isEditing && (
-        <>
-        {/* Logout button */}
-          <TouchableOpacity style={styles.logoutButton} onPress={() => router.replace("/(auth)/login")}>
-            <Text style={styles.logoutButtonText}>Log Out</Text>
-          </TouchableOpacity>
-
-          {/* Delete account button */}
-          <TouchableOpacity style={styles.deleteAccountButton} onPress={handleDeleteAccount}>
-            <Text style={styles.deleteAccountButtonText}>Delete Account</Text>
-          </TouchableOpacity>
-        </>
-      )}
-
+      {/* Delete account button */}
+      <TouchableOpacity style={styles.deleteAccountButton} onPress={handleDeleteAccount}>
+        <Text style={styles.deleteAccountButtonText}>Delete Account</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -283,4 +269,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
+
 });
