@@ -569,5 +569,6 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontWeight: 'bold',
     textAlign: 'center',
-  }
+  },
+  
 });
